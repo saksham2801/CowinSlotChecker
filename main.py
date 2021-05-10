@@ -6,6 +6,7 @@ import json
 from tabulate import tabulate
 import smtplib, ssl
 import flask
+import asyncio
 
 
 def send_alert(center_arr, session_arr):
@@ -56,6 +57,7 @@ def empty():
 
 
 def main():
+    app.run(ssl_context='adhoc')
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45}
     pincode_to_age = {'560087': 45}
     available_capacity = -1
@@ -86,7 +88,8 @@ def main():
                                 center_arr.append(center)
                                 session_arr.append(session)
                     print(res_json)
-                    time.sleep(5)
+                    #await asyncio.sleep(5)
+                    time.sleep(1)
                 except:
                     print(res)
                     continue
@@ -97,7 +100,9 @@ def main():
             send_alert(center_arr, session_arr)
         else:
             print("No Slots found for next " + str(num_of_days) + " days")
+        #await asyncio.sleep(20)
         time.sleep(20)
 
 main()
-app.run(ssl_context='adhoc')
+#asyncio.run(main())
+
