@@ -1,1 +1,1 @@
-web: python main.py
+web: python main.py --bind 127.0.0.1:5000
