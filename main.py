@@ -48,6 +48,10 @@ app.config["DEBUG"] = True
 
 
 @app.route('/', methods=['GET'])
+def empty():
+    print("Hello")
+    return "hello"
+
 def main():
     # pincode = ['560087','560037','560103','560035','244001','244901']
     # age_limit = 18
@@ -88,9 +92,7 @@ def main():
             print("No Slots found for next " + str(num_of_days) + " days")
         time.sleep(20)
 
-
-app.run(ssl_context='adhoc')
-
+main()
 # main()
 
 
