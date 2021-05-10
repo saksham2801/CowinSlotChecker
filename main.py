@@ -5,10 +5,11 @@ import datetime as dt2
 import json
 from tabulate import tabulate
 import smtplib, ssl
+import document
 
 
 def sendAlert(center_arr, session_arr):
-    message = [['Center id', 'Center name', 'Center Address', 'Center pincode', 'Center lat', 'Center long', 'fee_type',\
+    message = [['Center id', 'Center name', 'Center Address', 'Center pincode', 'Center lat', 'Center long', 'fee_type', \
                 'date', 'available_capacity', 'min_age_limit', 'vaccine', 'slots']]
     for i in range(len(center_arr)):
         center_id = str(center_arr[i]['center_id'])
@@ -23,7 +24,8 @@ def sendAlert(center_arr, session_arr):
         min_age_limit = str(session_arr[i]['min_age_limit'])
         vaccine = str(session_arr[i]['vaccine'])
         slots = "   <----->   ".join(session_arr[i]['slots'])
-        temp_msg = [center_id,center_name,center_add,center_pincode,center_lat,center_long,fee_type,date,available_capacity,min_age_limit,vaccine,slots]
+        temp_msg = [center_id, center_name, center_add, center_pincode, center_lat, center_long, fee_type, date,
+                    available_capacity, min_age_limit, vaccine, slots]
         message.append(temp_msg)
     message = str(tabulate(message))
     print(message)
@@ -41,23 +43,23 @@ def sendAlert(center_arr, session_arr):
         server.sendmail(sender_email, receiver_email, message)
 
 
-
 def main():
-    pincode = ['560087','560037','560103','560035','244001','244901']
-    age_limit = 18
+    # pincode = ['560087','560037','560103','560035','244001','244901']
+    # age_limit = 18
+    pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45}
     available_capacity = 0
     num_of_days = 15
-    while(True):
+    while (True):
         center_arr = []
         session_arr = []
-        for pin in pincode:
+        for pin, age_limit in pincode_to_age.items():
             for i in range(num_of_days):
                 d = (datetime.today() + dt2.timedelta(days=i)).strftime('%d-%m-%Y')
                 url = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=' + pin + '&date=' + d
                 headers = {
-                        'user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
+                    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
                 }
-                res = requests.get(url, headers = headers)
+                res = requests.get(url, headers=headers)
                 res_json = json.loads(res.text)
                 if 'centers' not in res_json:
                     continue
@@ -65,12 +67,13 @@ def main():
                     if 'session' not in center['sessions']:
                         continue
                     for session in center['sessions']:
-                        if 'min_age_limit' in session and int(session['min_age_limit']) >= age_limit and \
-                                'available_capacity' in session and int(session['available_capacity']) > available_capacity:
+                        if 'min_age_limit' in session and int(session['min_age_limit']) == age_limit and \
+                                'available_capacity' in session and \
+                                int(session['available_capacity']) > available_capacity:
                             center_arr.append(center)
                             session_arr.append(session)
                 print(res_json)
-                time.sleep(5)
+                # time.sleep(5)
         if len(center_arr) > 0:
             sendAlert(center_arr, session_arr)
         else:
@@ -78,4 +81,8 @@ def main():
         time.sleep(20)
 
 
-main()
+def greet():
+    main()
+
+
+document.getElementById("greet-button").addEventListener('click', greet)
