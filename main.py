@@ -5,7 +5,7 @@ import datetime as dt2
 import json
 from tabulate import tabulate
 import smtplib, ssl
-
+import document
 
 def sendAlert(center_arr, session_arr):
     message = [['Center id', 'Center name', 'Center Address', 'Center pincode', 'Center lat', 'Center long', 'fee_type', \
@@ -82,11 +82,14 @@ def main():
             print("No Slots found for next " + str(num_of_days) + " days")
         time.sleep(20)
 
+
 main()
-# def greet():
-#     document.getElementById("status").innerHtml = "Started"
-#     main()
-#     document.getElementById("status").innerHtml = "Finished"
-#
-#
-# document.getElementById("greet-button").bind('click', greet)
+
+
+def run():
+    document.getElementById("status").innerHtml = "Started"
+    main()
+    document.getElementById("status").innerHtml = "Finished"
+
+
+document.getElementById("run-button").bind('click', run)
