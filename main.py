@@ -56,6 +56,7 @@ def main():
     # pincode = ['560087','560037','560103','560035','244001','244901']
     # age_limit = 18
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45}
+    pincode_to_age = {'560087': 45}
     available_capacity = -1
     num_of_days = 15
     while (True):
