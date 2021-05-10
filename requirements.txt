@@ -1,7 +1,6 @@
 requests
 flask
 tabulate
-smtplib
 
 ###### Requirements with Version Specifiers ######`
 pyOpenSSL==0.14
