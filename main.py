@@ -87,6 +87,7 @@ def main():
                     print(res_json)
                     time.sleep(5)
                 except:
+                    print(res)
                     continue
         if len(center_arr) > 0:
             send_alert(center_arr, session_arr)
