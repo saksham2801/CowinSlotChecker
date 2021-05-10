@@ -81,10 +81,10 @@ def main():
         time.sleep(20)
 
 
-def greet():
-    document.getElementById("status").innerHtml = "Started"
-    main()
-    document.getElementById("status").innerHtml = "Finished"
-
-
-document.getElementById("greet-button").bind('click', greet)
+# def greet():
+#     document.getElementById("status").innerHtml = "Started"
+#     main()
+#     document.getElementById("status").innerHtml = "Finished"
+#
+#
+# document.getElementById("greet-button").bind('click', greet)

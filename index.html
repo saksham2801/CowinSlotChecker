@@ -1,6 +1,17 @@
 <html>
+<head>
+  <script type="text/python">
+    from main import *
+    from browser import document, alert
+
+    alert("Hello!")
+    document.getElementById("status").innerHtml = "Started"
+    main()
+    document.getElementById("status").innerHtml = "Finished"
+  </script>
+</head>
   <body>
     <button id="greet-button" onclick="greet()">Run</button>
-    <p id ="status">Start?</p>
+    <p id ="status">Start ?</p>
   </body>
 </html>
