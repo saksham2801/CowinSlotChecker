@@ -86,7 +86,7 @@ def main():
                                 center_arr.append(center)
                                 session_arr.append(session)
                     print(res_json)
-                    time.sleep(1)
+                    time.sleep(5)
                 except:
                     print(res)
                     continue
