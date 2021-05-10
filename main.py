@@ -68,7 +68,22 @@ def main():
                 d = (datetime.today() + dt2.timedelta(days=i)).strftime('%d-%m-%Y')
                 url = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=' + pin + '&date=' + d
                 headers = {
-                    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
+                    'authority':'cdn-api.co-vin.in',
+                    'method':'GET',
+                    'path':'/api/v2/appointment/sessions/public/calendarByPin?pincode=560103&date=10-05-2021',
+                    'scheme':'https',
+                    'accept':'application/json, text/plain, */*',
+                    'accept-encoding':'gzip, deflate, br',
+                    'accept-language':'en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7',
+                    'dnt':'1',
+                    'origin':'https://www.cowin.gov.in',
+                    'referer':'https://www.cowin.gov.in/',
+                    'sec-ch-ua':'" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
+                    'sec-ch-ua-mobile':'?0',
+                    'sec-fetch-dest':'empty',
+                    'sec-fetch-mode':'cors',
+                    'sec-fetch-site':'cross-site',
+                    'user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
                 }
                 res = requests.get(url, headers=headers)
                 try:
