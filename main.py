@@ -46,8 +46,8 @@ def sendAlert(center_arr, session_arr):
 def main():
     # pincode = ['560087','560037','560103','560035','244001','244901']
     # age_limit = 18
-    pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45}
-    available_capacity = 0
+    pincode_to_age = {'560087': 45, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45}
+    available_capacity = -1
     num_of_days = 15
     while (True):
         center_arr = []
@@ -73,7 +73,7 @@ def main():
                             center_arr.append(center)
                             session_arr.append(session)
                 print(res_json)
-                # time.sleep(5)
+                time.sleep(5)
         if len(center_arr) > 0:
             sendAlert(center_arr, session_arr)
         else:
@@ -82,7 +82,9 @@ def main():
 
 
 def greet():
+    document.getElementById("status").innerHtml = "Started"
     main()
+    document.getElementById("status").innerHtml = "Finished"
 
 
 document.getElementById("greet-button").addEventListener('click', greet)
