@@ -5,7 +5,6 @@ import datetime as dt2
 import json
 from tabulate import tabulate
 import smtplib, ssl
-import document
 
 
 def sendAlert(center_arr, session_arr):
@@ -46,7 +45,7 @@ def sendAlert(center_arr, session_arr):
 def main():
     # pincode = ['560087','560037','560103','560035','244001','244901']
     # age_limit = 18
-    pincode_to_age = {'560087': 45, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45}
+    pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45}
     available_capacity = -1
     num_of_days = 15
     while (True):
@@ -60,27 +59,30 @@ def main():
                     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
                 }
                 res = requests.get(url, headers=headers)
-                res_json = json.loads(res.text)
-                if 'centers' not in res_json:
-                    continue
-                for center in res_json['centers']:
-                    if 'session' not in center['sessions']:
+                try:
+                    res_json = json.loads(res.text)
+                    if 'centers' not in res_json:
                         continue
-                    for session in center['sessions']:
-                        if 'min_age_limit' in session and int(session['min_age_limit']) == age_limit and \
-                                'available_capacity' in session and \
-                                int(session['available_capacity']) > available_capacity:
-                            center_arr.append(center)
-                            session_arr.append(session)
-                print(res_json)
-                time.sleep(5)
+                    for center in res_json['centers']:
+                        if 'session' not in center['sessions']:
+                            continue
+                        for session in center['sessions']:
+                            if 'min_age_limit' in session and int(session['min_age_limit']) == age_limit and \
+                                    'available_capacity' in session and \
+                                    int(session['available_capacity']) > available_capacity:
+                                center_arr.append(center)
+                                session_arr.append(session)
+                    print(res_json)
+                    time.sleep(5)
+                except:
+                    continue
         if len(center_arr) > 0:
             sendAlert(center_arr, session_arr)
         else:
             print("No Slots found for next " + str(num_of_days) + " days")
         time.sleep(20)
 
-
+main()
 # def greet():
 #     document.getElementById("status").innerHtml = "Started"
 #     main()
