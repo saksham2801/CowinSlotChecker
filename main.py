@@ -5,7 +5,6 @@ import datetime as dt2
 import json
 from tabulate import tabulate
 import smtplib, ssl
-# import document
 import flask
 
 
