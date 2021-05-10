@@ -56,8 +56,6 @@ def empty():
 
 
 def main():
-    # pincode = ['560087','560037','560103','560035','244001','244901']
-    # age_limit = 18
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45}
     pincode_to_age = {'560087': 45}
     available_capacity = -1
@@ -72,13 +70,14 @@ def main():
                 headers = {
                     'user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
                 }
+                print("Hitting the URL for " + str(i) + " times !!!")
                 res = requests.get(url, headers=headers)
                 try:
                     res_json = json.loads(res.text)
                     if 'centers' not in res_json:
                         continue
                     for center in res_json['centers']:
-                        if 'session' not in center['sessions']:
+                        if 'sessions' not in center:
                             continue
                         for session in center['sessions']:
                             if 'min_age_limit' in session and int(session['min_age_limit']) == age_limit and \
@@ -87,10 +86,13 @@ def main():
                                 center_arr.append(center)
                                 session_arr.append(session)
                     print(res_json)
-                    time.sleep(5)
+                    time.sleep(1)
                 except:
                     print(res)
                     continue
+
+
+        print("Length of Response : ", len(center_arr))
         if len(center_arr) > 0:
             send_alert(center_arr, session_arr)
         else:
@@ -99,14 +101,3 @@ def main():
 
 main()
 app.run(ssl_context='adhoc')
-
-
-
-
-# def run():
-#     document.getElementById("status").innerHtml = "Started"
-#     main()
-#     document.getElementById("status").innerHtml = "Finished"
-#
-#
-# document.getElementById("run-button").bind('click', run)
