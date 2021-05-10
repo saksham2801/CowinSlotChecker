@@ -84,7 +84,7 @@ def main():
                 except:
                     continue
         if len(center_arr) > 0:
-            sendAlert(center_arr, session_arr)
+            send_alert(center_arr, session_arr)
         else:
             print("No Slots found for next " + str(num_of_days) + " days")
         time.sleep(20)
