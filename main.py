@@ -87,4 +87,4 @@ def greet():
     document.getElementById("status").innerHtml = "Finished"
 
 
-document.getElementById("greet-button").addEventListener('click', greet)
+# document.getElementById("greet-button").addEventListener('click', greet)
