@@ -6,8 +6,10 @@ import json
 from tabulate import tabulate
 import smtplib, ssl
 import document
+import flask
 
-def sendAlert(center_arr, session_arr):
+
+def send_alert(center_arr, session_arr):
     message = [['Center id', 'Center name', 'Center Address', 'Center pincode', 'Center lat', 'Center long', 'fee_type', \
                 'date', 'available_capacity', 'min_age_limit', 'vaccine', 'slots']]
     for i in range(len(center_arr)):
@@ -42,6 +44,11 @@ def sendAlert(center_arr, session_arr):
         server.sendmail(sender_email, receiver_email, message)
 
 
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+
+
+@app.route('/', methods=['GET'])
 def main():
     # pincode = ['560087','560037','560103','560035','244001','244901']
     # age_limit = 18
@@ -83,13 +90,15 @@ def main():
         time.sleep(20)
 
 
-main()
+app.run()
+
+# main()
 
 
-def run():
-    document.getElementById("status").innerHtml = "Started"
-    main()
-    document.getElementById("status").innerHtml = "Finished"
-
-
-document.getElementById("run-button").bind('click', run)
+# def run():
+#     document.getElementById("status").innerHtml = "Started"
+#     main()
+#     document.getElementById("status").innerHtml = "Finished"
+#
+#
+# document.getElementById("run-button").bind('click', run)
