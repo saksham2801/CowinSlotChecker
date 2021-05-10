@@ -6,7 +6,7 @@ import json
 from tabulate import tabulate
 import smtplib, ssl
 # import document
-# import flask
+import flask
 
 
 def send_alert(center_arr, session_arr):
@@ -44,11 +44,11 @@ def send_alert(center_arr, session_arr):
         server.sendmail(sender_email, receiver_email, message)
 
 
-# app = flask.Flask(__name__)
-# app.config["DEBUG"] = True
-#
-#
-# @app.route('/', methods=['GET'])
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+
+
+@app.route('/', methods=['GET'])
 def main():
     # pincode = ['560087','560037','560103','560035','244001','244901']
     # age_limit = 18
@@ -90,9 +90,9 @@ def main():
         time.sleep(20)
 
 
-# app.run()
+app.run()
 
-main()
+# main()
 
 
 # def run():
