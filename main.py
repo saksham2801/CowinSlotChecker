@@ -90,7 +90,7 @@ def main():
         time.sleep(20)
 
 
-app.run()
+app.run(ssl_context='adhoc')
 
 # main()
 
