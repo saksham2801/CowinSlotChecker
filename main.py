@@ -94,9 +94,10 @@ def main():
             print("No Slots found for next " + str(num_of_days) + " days")
         time.sleep(20)
 
+main()
 app.run(ssl_context='adhoc')
 
-main()
+
 
 
 # def run():
