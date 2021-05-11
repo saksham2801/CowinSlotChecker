@@ -61,6 +61,7 @@ def main():
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45, '132103': 18}
     available_capacity = 0
     num_of_days = 15
+    requests.get('https://127.0.0.1:5000')
     while (True):
         center_arr = []
         session_arr = []
