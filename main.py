@@ -64,7 +64,7 @@ def hello():
 
 
 def main():
-    #app.run(ssl_context='adhoc', port=5000)
+    app.run(ssl_context=('cert.pem', 'key.pem'))
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '132103': 18}
     #, '244901': 45
     available_capacity = 0
