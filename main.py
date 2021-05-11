@@ -8,6 +8,10 @@ import smtplib, ssl
 import flask
 import os
 import asyncio
+import ssl
+
+context = ssl.SSLContext()
+context.load_cert_chain('cert.pem', 'key.pem')
 
 message_all = []
 
@@ -65,8 +69,8 @@ def hello():
 
 
 def main():
-    port = int(os.environ.get('PORT', 33507))
-    app.run(ssl_context=('cert.pem', 'key.pem'),port = port)
+    #port = int(os.environ.get('PORT', 33507))
+    app.run(ssl_context=context)
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '132103': 18}
     #, '244901': 45
     available_capacity = 0
