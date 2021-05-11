@@ -9,6 +9,8 @@ import flask
 import asyncio
 
 message_all = []
+
+
 def send_alert(center_arr, session_arr):
     global message_all
     print("You'll Receive the Email soon!!")
@@ -27,7 +29,7 @@ def send_alert(center_arr, session_arr):
         min_age_limit = str(session_arr[i]['min_age_limit'])
         vaccine = str(session_arr[i]['vaccine'])
         slots = "   <----->   ".join(session_arr[i]['slots'])
-        temp_msg = [center_add, center_id, center_name,  center_pincode, center_lat, center_long, fee_type, date,
+        temp_msg = [center_add, center_id, center_name, center_pincode, center_lat, center_long, fee_type, date,
                     available_capacity, min_age_limit, vaccine, slots]
         message.append(temp_msg)
 
@@ -63,7 +65,7 @@ def empty():
 
 
 def main():
-    app.run(ssl_context='adhoc')
+    app.run(ssl_context='adhoc', port=5000)
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45, '132103': 18}
     available_capacity = 0
     num_of_days = 15
@@ -75,7 +77,7 @@ def main():
                 d = (datetime.today() + dt2.timedelta(days=i)).strftime('%d-%m-%Y')
                 url = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=' + pin + '&date=' + d
                 headers = {
-                    'user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
+                    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
                 }
                 print("Hitting the URL for " + str(i) + " times !!!")
                 res = requests.get(url, headers=headers)
@@ -93,21 +95,20 @@ def main():
                                 center_arr.append(center)
                                 session_arr.append(session)
                     print(res_json)
-                    #await asyncio.sleep(5)
+                    # await asyncio.sleep(5)
                     time.sleep(5)
                 except:
                     print(res)
                     continue
-
 
         print("Length of Response : ", len(center_arr))
         if len(center_arr) > 0:
             send_alert(center_arr, session_arr)
         else:
             print("No Slots found for next " + str(num_of_days) + " days")
-        #await asyncio.sleep(20)
+        # await asyncio.sleep(20)
         time.sleep(20)
 
-main()
-#asyncio.run(main())
 
+main()
+# asyncio.run(main())
