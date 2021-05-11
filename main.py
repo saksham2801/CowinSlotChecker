@@ -16,7 +16,7 @@ context.load_cert_chain('cert.pem', 'key.pem')
 message_all = {}
 
 
-def send_alert(center_arr, session_arr):
+def send_alert(center_arr, session_arr, pin):
     global message_all
     print("You'll Receive the Email soon!!")
     message = [['Center Address', 'Center id', 'Center name', 'Center pincode', 'Center lat', 'Center long', 'fee_type', \
@@ -27,10 +27,6 @@ def send_alert(center_arr, session_arr):
         center_name = str(center_arr[i]['name'])
         center_add = str(center_arr[i]['address'])
         center_pincode = str(center_arr[i]['pincode'])
-        if center_pincode == "244001":
-            subject += "Moradabad"
-        else:
-            subject += "Bangalore - " + center_pincode
         center_lat = str(center_arr[i]['lat'])
         center_long = str(center_arr[i]['long'])
         fee_type = str(center_arr[i]['fee_type'])
@@ -42,14 +38,17 @@ def send_alert(center_arr, session_arr):
         temp_msg = [center_add, center_id, center_name, center_pincode, center_lat, center_long, fee_type, date,
                     available_capacity, min_age_limit, vaccine, slots]
         message.append(temp_msg)
-
+    if pin == "244001":
+        subject += "Moradabad"
+    else:
+        subject += "Bangalore - " + pin
     message = str(tabulate(message))
     message = "Subject : {}\n\n{}".format(subject, message)
     print(message)
-    if center_pincode in message_all and message_all[center_pincode] == message:
+    if pin in message_all and message_all[pin] == message:
         print("Same Email will be sent")
         return
-    message_all[center_pincode] = message
+    message_all[pin] = message
     smtp_server = "smtp.gmail.com"
     port = 587
     sender_email = "saksham2801@gmail.com"
@@ -114,7 +113,7 @@ def main():
                 time.sleep(5)
             print("Length of Response : ", len(center_arr))
             if len(center_arr) > 0:
-                send_alert(center_arr, session_arr)
+                send_alert(center_arr, session_arr, pin)
             else:
                 print("No Slots found for next " + str(num_of_days) + " days")
         # await asyncio.sleep(20)
