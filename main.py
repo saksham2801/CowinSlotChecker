@@ -15,6 +15,7 @@ context.load_cert_chain('cert.pem', 'key.pem')
 
 message_all = {}
 
+
 def send_alert(center_arr, session_arr):
     global message_all
     print("You'll Receive the Email soon!!")
@@ -41,7 +42,6 @@ def send_alert(center_arr, session_arr):
         temp_msg = [center_add, center_id, center_name, center_pincode, center_lat, center_long, fee_type, date,
                     available_capacity, min_age_limit, vaccine, slots]
         message.append(temp_msg)
-
 
     message = str(tabulate(message))
     message = "Subject : {}\n\n{}".format(subject, message)
@@ -76,10 +76,10 @@ def hello():
 
 def main():
     port = int(os.environ.get('PORT', 33507))
-    app.run(ssl_context=context, port = port)
+    app.run(ssl_context=context, port=port)
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '132103': 18}
-    #pincode_to_age = {'244001': 45}
-    #, '244901': 45
+    # pincode_to_age = {'244001': 45}
+    # , '244901': 45
     available_capacity = 0
     num_of_days = 15
     while (True):
