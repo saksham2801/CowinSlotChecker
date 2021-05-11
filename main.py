@@ -56,10 +56,10 @@ def empty():
     return "hello"
 
 
-async def main():
-    pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45}
-    pincode_to_age = {'560087': 45}
-    available_capacity = -1
+def main():
+    app.run(ssl_context='adhoc')
+    pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '244901': 45, '132103': 18}
+    available_capacity = 0
     num_of_days = 15
     while (True):
         center_arr = []
@@ -87,8 +87,8 @@ async def main():
                                 center_arr.append(center)
                                 session_arr.append(session)
                     print(res_json)
-                    await asyncio.sleep(5)
-                    #time.sleep(1)
+                    #await asyncio.sleep(5)
+                    time.sleep(5)
                 except:
                     print(res)
                     continue
@@ -99,9 +99,9 @@ async def main():
             send_alert(center_arr, session_arr)
         else:
             print("No Slots found for next " + str(num_of_days) + " days")
-        await asyncio.sleep(20)
-        #time.sleep(20)
+        #await asyncio.sleep(20)
+        time.sleep(20)
 
-#main()
-asyncio.run(main())
-app.run(ssl_context='adhoc')
+main()
+#asyncio.run(main())
+
