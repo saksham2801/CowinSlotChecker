@@ -6,6 +6,7 @@ import json
 from tabulate import tabulate
 import smtplib, ssl
 import flask
+import os
 import asyncio
 
 message_all = []
@@ -64,7 +65,8 @@ def hello():
 
 
 def main():
-    app.run(ssl_context=('cert.pem', 'key.pem'))
+    port = int(os.environ.get('PORT', 33507))
+    app.run(ssl_context=('cert.pem', 'key.pem'),port = port)
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '132103': 18}
     #, '244901': 45
     available_capacity = 0
