@@ -8,10 +8,11 @@ import smtplib, ssl
 import flask
 import asyncio
 
-
+message_all = []
 def send_alert(center_arr, session_arr):
+    global message_all
     print("You'll Receive the Email soon!!")
-    message = [['Center id', 'Center name', 'Center Address', 'Center pincode', 'Center lat', 'Center long', 'fee_type', \
+    message = [['Center Address', 'Center id', 'Center name', 'Center pincode', 'Center lat', 'Center long', 'fee_type', \
                 'date', 'available_capacity', 'min_age_limit', 'vaccine', 'slots']]
     for i in range(len(center_arr)):
         center_id = str(center_arr[i]['center_id'])
@@ -26,11 +27,16 @@ def send_alert(center_arr, session_arr):
         min_age_limit = str(session_arr[i]['min_age_limit'])
         vaccine = str(session_arr[i]['vaccine'])
         slots = "   <----->   ".join(session_arr[i]['slots'])
-        temp_msg = [center_id, center_name, center_add, center_pincode, center_lat, center_long, fee_type, date,
+        temp_msg = [center_add, center_id, center_name,  center_pincode, center_lat, center_long, fee_type, date,
                     available_capacity, min_age_limit, vaccine, slots]
         message.append(temp_msg)
+
     message = str(tabulate(message))
     print(message)
+    if message_all == message:
+        print("Same Email will be sent")
+        return
+    message_all = message
     smtp_server = "smtp.gmail.com"
     port = 587
     sender_email = "saksham2801@gmail.com"
