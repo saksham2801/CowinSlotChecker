@@ -40,6 +40,8 @@ def send_alert(center_arr, session_arr, pin):
         message.append(temp_msg)
     if pin == "244001":
         subject += "Moradabad"
+    elif pin == "132103":
+        subject += "Panipat"
     else:
         subject += "Bangalore - " + pin
     message = str(tabulate(message))
