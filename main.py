@@ -21,7 +21,7 @@ def send_alert(center_arr, session_arr, pin):
     print("You'll Receive the Email soon!!")
     message = [['Center Address', 'Center id', 'Center name', 'Center pincode', 'Center lat', 'Center long', 'fee_type', \
                 'date', 'available_capacity', 'min_age_limit', 'vaccine', 'slots']]
-    subject = "Vaccine avalability alert @ "
+    subject = "Vaccine availability alert @ "
     for i in range(len(center_arr)):
         center_id = str(center_arr[i]['center_id'])
         center_name = str(center_arr[i]['name'])
@@ -78,7 +78,7 @@ def hello():
 def main():
     port = int(os.environ.get('PORT', 33507))
     app.run(ssl_context=context, port=port)
-    pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '132103': 18}
+    pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '132103': 18}
     # pincode_to_age = {'244001': 45}
     # , '244901': 45
     available_capacity = 0
