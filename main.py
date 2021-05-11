@@ -1,30 +1,35 @@
-import time
-import requests
-from datetime import datetime
 import datetime as dt2
 import json
-from tabulate import tabulate
-import smtplib, ssl
-import flask
 import os
-import asyncio
+import smtplib
+import ssl
+import time
+from datetime import datetime
+
+import flask
+import requests
+from tabulate import tabulate
 
 context = ssl.SSLContext()
 context.load_cert_chain('cert.pem', 'key.pem')
 
-message_all = []
-
+message_all = {}
 
 def send_alert(center_arr, session_arr):
     global message_all
     print("You'll Receive the Email soon!!")
     message = [['Center Address', 'Center id', 'Center name', 'Center pincode', 'Center lat', 'Center long', 'fee_type', \
                 'date', 'available_capacity', 'min_age_limit', 'vaccine', 'slots']]
+    subject = "Vaccine avalability alert @ "
     for i in range(len(center_arr)):
         center_id = str(center_arr[i]['center_id'])
         center_name = str(center_arr[i]['name'])
         center_add = str(center_arr[i]['address'])
         center_pincode = str(center_arr[i]['pincode'])
+        if center_pincode == "244001":
+            subject += "Moradabad"
+        else:
+            subject += "Bangalore - " + center_pincode
         center_lat = str(center_arr[i]['lat'])
         center_long = str(center_arr[i]['long'])
         fee_type = str(center_arr[i]['fee_type'])
@@ -37,12 +42,14 @@ def send_alert(center_arr, session_arr):
                     available_capacity, min_age_limit, vaccine, slots]
         message.append(temp_msg)
 
+
     message = str(tabulate(message))
+    message = "Subject : {}\n\n{}".format(subject, message)
     print(message)
-    if message_all == message:
+    if center_pincode in message_all and message_all[center_pincode] == message:
         print("Same Email will be sent")
         return
-    message_all = message
+    message_all[center_pincode] = message
     smtp_server = "smtp.gmail.com"
     port = 587
     sender_email = "saksham2801@gmail.com"
@@ -71,13 +78,14 @@ def main():
     port = int(os.environ.get('PORT', 33507))
     app.run(ssl_context=context, port = port)
     pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '244001': 45, '132103': 18}
+    #pincode_to_age = {'244001': 45}
     #, '244901': 45
     available_capacity = 0
     num_of_days = 15
     while (True):
-        center_arr = []
-        session_arr = []
         for pin, age_limit in pincode_to_age.items():
+            center_arr = []
+            session_arr = []
             for i in range(num_of_days):
                 d = (datetime.today() + dt2.timedelta(days=i)).strftime('%d-%m-%Y')
                 url = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=' + pin + '&date=' + d
@@ -101,16 +109,14 @@ def main():
                                 session_arr.append(session)
                     print(res_json)
                     # await asyncio.sleep(5)
-                    time.sleep(5)
                 except:
                     print(res)
-                    continue
-
-        print("Length of Response : ", len(center_arr))
-        if len(center_arr) > 0:
-            send_alert(center_arr, session_arr)
-        else:
-            print("No Slots found for next " + str(num_of_days) + " days")
+                time.sleep(5)
+            print("Length of Response : ", len(center_arr))
+            if len(center_arr) > 0:
+                send_alert(center_arr, session_arr)
+            else:
+                print("No Slots found for next " + str(num_of_days) + " days")
         # await asyncio.sleep(20)
         time.sleep(20)
 
