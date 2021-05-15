@@ -16,13 +16,15 @@ context.load_cert_chain('cert.pem', 'key.pem')
 message_all = {}
 
 
-def send_alert(center_arr, session_arr, pin):
+def send_alert(center_arr, session_arr, id):
     global message_all
     print("You'll Receive the Email soon!!")
     message = [['Center Address', 'Center id', 'Center name', 'Center pincode', 'Center lat', 'Center long', 'fee_type', \
                 'date', 'available_capacity', 'min_age_limit', 'vaccine', 'slots']]
     subject = "Vaccine availability alert @ "
     for i in range(len(center_arr)):
+        if i == 0:
+            subject += str(center_arr[i]['district_name'])
         center_id = str(center_arr[i]['center_id'])
         center_name = str(center_arr[i]['name'])
         center_add = str(center_arr[i]['address'])
@@ -38,19 +40,14 @@ def send_alert(center_arr, session_arr, pin):
         temp_msg = [center_add, center_id, center_name, center_pincode, center_lat, center_long, fee_type, date,
                     available_capacity, min_age_limit, vaccine, slots]
         message.append(temp_msg)
-    if pin == "244001":
-        subject += "Moradabad"
-    elif pin == "132103":
-        subject += "Panipat"
-    else:
-        subject += "Bangalore - " + pin
+
     message = str(tabulate(message))
     message = "Subject : {}\n\n{}".format(subject, message)
     print(message)
-    if pin in message_all and message_all[pin] == message:
+    if id in message_all and message_all[id] == message:
         print("Same Email will be sent")
         return
-    message_all[pin] = message
+    message_all[id] = message
     smtp_server = "smtp.gmail.com"
     port = 587
     sender_email = "saksham2801@gmail.com"
@@ -78,18 +75,21 @@ def hello():
 def main():
     port = int(os.environ.get('PORT', 33507))
     app.run(ssl_context=context, port=port)
-    pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '132103': 18}
+    pincode_to_age = {'560087': 18, '560037': 18, '560103': 18, '560035': 18, '132103': 18, '244001': 18}
     # pincode_to_age = {'244001': 45}
+    dis_to_age = {'265': [18], '276': [18], '678': [18, 45], '195': [18]}
     # , '244901': 45
     available_capacity = 0
     num_of_days = 15
     while (True):
-        for pin, age_limit in pincode_to_age.items():
+        # for pin, age_limit in pincode_to_age.items():
+        for dis, age_limit in dis_to_age.items():
             center_arr = []
             session_arr = []
             for i in range(num_of_days):
                 d = (datetime.today() + dt2.timedelta(days=i)).strftime('%d-%m-%Y')
-                url = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=' + pin + '&date=' + d
+                url = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=' + dis + '&date=' + d
+                # url = 'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=' + pin + '&date=' + d
                 headers = {
                     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
                 }
@@ -103,7 +103,7 @@ def main():
                         if 'sessions' not in center:
                             continue
                         for session in center['sessions']:
-                            if 'min_age_limit' in session and int(session['min_age_limit']) == age_limit and \
+                            if 'min_age_limit' in session and int(session['min_age_limit']) in age_limit and \
                                     'available_capacity' in session and \
                                     int(session['available_capacity']) > available_capacity:
                                 center_arr.append(center)
@@ -112,10 +112,11 @@ def main():
                     # await asyncio.sleep(5)
                 except:
                     print(res)
-                time.sleep(5)
+                time.sleep(2)
             print("Length of Response : ", len(center_arr))
             if len(center_arr) > 0:
-                send_alert(center_arr, session_arr, pin)
+                send_alert(center_arr, session_arr, dis)
+                # send_alert(center_arr, session_arr, pin)
             else:
                 print("No Slots found for next " + str(num_of_days) + " days")
         # await asyncio.sleep(20)
